@@ -1,5 +1,6 @@
 const fs = require("fs");
 const http = require("http");
+const url = require("url");
 
 //////////////////////////////////////////
 //// Files
@@ -59,8 +60,8 @@ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
-  const pathName = req.url;
-
+  const { query, pathname: pathName } = url.parse(req.url, true);
+  // Overview Page
   if (pathName === "/" || pathName === "/overview") {
     res.writeHead(200, {
       "Content-type": "text/html",
@@ -70,13 +71,25 @@ const server = http.createServer((req, res) => {
       .join("");
     const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsHtml);
     res.end(output);
-  } else if (pathName === "/product") res.end("This is the PRODUCT!");
+  }
+  // Product Page
+  else if (pathName === "/product") {
+    res.writeHead(200, {
+      "Content-type": "text/html",
+    });
+    const product = dataObj[query.id];
+    const output = replaceTemplate(tempProduct, product);
+    res.end(output);
+  }
+  // API
   else if (pathName === "/api") {
     res.writeHead(200, {
       "Content-type": "application/json",
     });
     res.end(data);
-  } else {
+  }
+  // Not found Page
+  else {
     res.writeHead(404, {
       "Content-Type": "text/html",
       "my-own-header": "hello-world",
