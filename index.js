@@ -1,6 +1,7 @@
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+const slugify = require("slugify");
 const replaceTemplate = require("./modules/replaceTemplate");
 
 //////////////////////////////////////////
@@ -34,6 +35,7 @@ const tempProduct = fs.readFileSync(
   `${__dirname}/templates/template-product.html`,
   "utf-8"
 );
+
 const tempOverview = fs.readFileSync(
   `${__dirname}/templates/template-overview.html`,
   "utf-8"
@@ -60,11 +62,18 @@ const server = http.createServer((req, res) => {
     res.end(output);
   }
   // Product Page
-  else if (pathName === "/product") {
+  else if (pathName.startsWith("/product/")) {
     res.writeHead(200, {
       "Content-type": "text/html",
     });
-    const product = dataObj[query.id];
+    const productName = pathName.split("/")[2];
+    const product = dataObj.find(
+      (el) =>
+        productName ===
+        slugify(el.productName, {
+          lower: true,
+        })
+    );
     const output = replaceTemplate(tempProduct, product);
     res.end(output);
   }
@@ -88,3 +97,5 @@ const server = http.createServer((req, res) => {
 server.listen(8000, "127.0.0.1", () => {
   console.log("Listening to the requests on port 8000");
 });
+
+// Test slugify

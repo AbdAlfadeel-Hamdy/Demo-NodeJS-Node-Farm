@@ -1,0 +1,22 @@
+{
+  "name": "node-farm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdAlfadeel-Hamdy/NodeJS-Node-Farm.git"
+  },
+  "author": "Abd Al-fadeel Hamdy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbdAlfadeel-Hamdy/NodeJS-Node-Farm/issues"
+  },
+  "homepage": "https://github.com/AbdAlfadeel-Hamdy/NodeJS-Node-Farm#readme",
+  "dependencies": {
+    "slugify": "^1.6.5"
+  }
+}
